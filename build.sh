@@ -11,6 +11,11 @@ sed '/#body#/{
     r body.tex
     }' $dir/template.tex > $dir/main.tex
 
+if [[ $dir == 'iclr' ]]
+then
+    sed -i '/newcommand{\\vs/d;/newcommand{\\ve/d' $dir/main.tex
+fi
+
 cp $dir/main.tex main_$dir.tex
 cp ref.bib $dir/
 

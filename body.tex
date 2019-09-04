@@ -8,9 +8,9 @@
 \newcommand{\etal}{\textit{et al}.}
 \newcommand{\ie}{\textit{i}.\textit{e}.}
 \newcommand{\eg}{\textit{e}.\textit{g}.}
-\newcommand{\vs}{\textit{V}.\textit{S}.}
+\newcommand{\wvs}{\textit{V}.\textit{S}.}
 
-\newcommand{\ve}[1]{\mathbf{#1}} % for displaying a vector
+\newcommand{\wve}[1]{\mathbf{#1}} % for displaying a vector
 \newcommand{\ma}[1]{\mathrm{#1}} % for displaying a matrix
 
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
@@ -96,10 +96,10 @@ When deeper networks are able to start converging, a \emph{degradation} problem 
 The degradation (of training accuracy) indicates that not all systems are similarly easy to optimize. Let us consider a shallower architecture and its deeper counterpart that adds more layers onto it. There exists a solution \emph{by construction} to the deeper model: the added layers are \emph{identity} mapping, and the other layers are copied from the learned shallower model. The existence of this constructed solution indicates that a deeper model should produce no higher training error than its shallower counterpart. But experiments show that our current solvers on hand are unable to find solutions that are comparably good or better than the constructed solution (or unable to do so in feasible time).
 
 In this paper, we address the degradation problem by introducing a \emph{deep residual learning} framework.
-Instead of hoping each few stacked layers directly fit a desired underlying mapping, we explicitly let these layers fit a residual mapping. Formally, denoting the desired underlying mapping as $\mathcal{H}(\ve{x})$, we let the stacked nonlinear layers fit another mapping of $\mathcal{F}(\ve{x}):=\mathcal{H}(\ve{x})-\ve{x}$. The original mapping is recast into $\mathcal{F}(\ve{x})+\ve{x}$.
+Instead of hoping each few stacked layers directly fit a desired underlying mapping, we explicitly let these layers fit a residual mapping. Formally, denoting the desired underlying mapping as $\mathcal{H}(\wve{x})$, we let the stacked nonlinear layers fit another mapping of $\mathcal{F}(\wve{x}):=\mathcal{H}(\wve{x})-\wve{x}$. The original mapping is recast into $\mathcal{F}(\wve{x})+\wve{x}$.
 We hypothesize that it is easier to optimize the residual mapping than to optimize the original, unreferenced mapping. To the extreme, if an identity mapping were optimal, it would be easier to push the residual to zero than to fit an identity mapping by a stack of nonlinear layers.
 
-The formulation of $\mathcal{F}(\ve{x})+\ve{x}$ can be realized by feedforward neural networks with ``shortcut connections'' (Fig.~\ref{fig:block}). Shortcut connections \cite{Bishop1995,Ripley1996,Venables1999} are those skipping one or more layers. In our case, the shortcut connections simply perform \emph{identity} mapping, and their outputs are added to the outputs of the stacked layers (Fig.~\ref{fig:block}). Identity shortcut connections add neither extra parameter nor computational complexity. The entire network can still be trained end-to-end by SGD with backpropagation, and can be easily implemented using common libraries (Caffe \cite{Jia2014}) without modifying the solvers.
+The formulation of $\mathcal{F}(\wve{x})+\wve{x}$ can be realized by feedforward neural networks with ``shortcut connections'' (Fig.~\ref{fig:block}). Shortcut connections \cite{Bishop1995,Ripley1996,Venables1999} are those skipping one or more layers. In our case, the shortcut connections simply perform \emph{identity} mapping, and their outputs are added to the outputs of the stacked layers (Fig.~\ref{fig:block}). Identity shortcut connections add neither extra parameter nor computational complexity. The entire network can still be trained end-to-end by SGD with backpropagation, and can be easily implemented using common libraries (Caffe \cite{Jia2014}) without modifying the solvers.
 
 \begin{figure}[t]
 \centering
@@ -144,8 +144,8 @@ Concurrent with our work, ``highway networks'' \cite{Srivastava2015,Srivastava20
 \subsection{Residual Learning}
 \label{sec:motivation}
 
-Let us consider $\mathcal{H}(\ve{x})$ as an underlying mapping to be fit by a few stacked layers (not necessarily the entire net), with $\ve{x}$ denoting the inputs to the first of these layers. If one hypothesizes that multiple nonlinear layers can asymptotically approximate complicated functions\footnote{This hypothesis, however, is still an open question. See \cite{Montufar2014}.}, then it is equivalent to hypothesize that they can asymptotically approximate the residual functions, \ie, $\mathcal{H}(\ve{x})-\ve{x}$ (assuming that the input and output are of the same dimensions).
-So rather than expect stacked layers to approximate $\mathcal{H}(\ve{x})$, we explicitly let these layers approximate a residual function $\mathcal{F}(\ve{x}):=\mathcal{H}(\ve{x})-\ve{x}$. The original function thus becomes $\mathcal{F}(\ve{x})+\ve{x}$. Although both forms should be able to asymptotically approximate the desired functions (as hypothesized), the ease of learning might be different.
+Let us consider $\mathcal{H}(\wve{x})$ as an underlying mapping to be fit by a few stacked layers (not necessarily the entire net), with $\wve{x}$ denoting the inputs to the first of these layers. If one hypothesizes that multiple nonlinear layers can asymptotically approximate complicated functions\footnote{This hypothesis, however, is still an open question. See \cite{Montufar2014}.}, then it is equivalent to hypothesize that they can asymptotically approximate the residual functions, \ie, $\mathcal{H}(\wve{x})-\wve{x}$ (assuming that the input and output are of the same dimensions).
+So rather than expect stacked layers to approximate $\mathcal{H}(\wve{x})$, we explicitly let these layers approximate a residual function $\mathcal{F}(\wve{x}):=\mathcal{H}(\wve{x})-\wve{x}$. The original function thus becomes $\mathcal{F}(\wve{x})+\wve{x}$. Although both forms should be able to asymptotically approximate the desired functions (as hypothesized), the ease of learning might be different.
 
 This reformulation is motivated by the counterintuitive phenomena about the degradation problem (Fig.~\ref{fig:teaser}, left). As we discussed in the introduction, if the added layers can be constructed as identity mappings, a deeper model should have training error no greater than its shallower counterpart. The degradation problem suggests that the solvers might have difficulties in approximating identity mappings by multiple nonlinear layers. With the residual learning reformulation, if identity mappings are optimal, the solvers may simply drive the weights of the multiple nonlinear layers toward zero to approach identity mappings.
 
@@ -157,22 +157,22 @@ We adopt residual learning to every few stacked layers.
 A building block is shown in Fig.~\ref{fig:block}. Formally, in this paper we consider a building block defined as:
 %\vspace{-.5em}
 \begin{equation}\label{eq:identity}
-\ve{y}= \mathcal{F}(\ve{x}, \{W_{i}\}) + \ve{x}.
+\wve{y}= \mathcal{F}(\wve{x}, \{W_{i}\}) + \wve{x}.
 \end{equation}
-Here $\ve{x}$ and $\ve{y}$ are the input and output vectors of the layers considered. The function $\mathcal{F}(\ve{x}, \{W_{i}\})$ represents the residual mapping to be learned. For the example in Fig.~\ref{fig:block} that has two layers, $\mathcal{F}=W_{2}\sigma(W_{1}\ve{x})$ in which $\sigma$ denotes ReLU \cite{Nair2010} and the biases are omitted for simplifying notations. The operation $\mathcal{F}+\ve{x}$ is performed by a shortcut connection and element-wise addition. We adopt the second nonlinearity after the addition (\ie, $\sigma(\ve{y})$, see Fig.~\ref{fig:block}).
+Here $\wve{x}$ and $\wve{y}$ are the input and output vectors of the layers considered. The function $\mathcal{F}(\wve{x}, \{W_{i}\})$ represents the residual mapping to be learned. For the example in Fig.~\ref{fig:block} that has two layers, $\mathcal{F}=W_{2}\sigma(W_{1}\wve{x})$ in which $\sigma$ denotes ReLU \cite{Nair2010} and the biases are omitted for simplifying notations. The operation $\mathcal{F}+\wve{x}$ is performed by a shortcut connection and element-wise addition. We adopt the second nonlinearity after the addition (\ie, $\sigma(\wve{y})$, see Fig.~\ref{fig:block}).
 
 The shortcut connections in Eqn.(\ref{eq:identity}) introduce neither extra parameter nor computation complexity. This is not only attractive in practice but also important in our comparisons between plain and residual networks. We can fairly compare plain/residual networks that simultaneously have the same number of parameters, depth, width, and computational cost (except for the negligible element-wise addition).
 
-The dimensions of $\ve{x}$ and $\mathcal{F}$ must be equal in Eqn.(\ref{eq:identity}). If this is not the case (when changing the input/output channels), we can perform a linear projection $W_{s}$ by the shortcut connections to match the dimensions:
+The dimensions of $\wve{x}$ and $\mathcal{F}$ must be equal in Eqn.(\ref{eq:identity}). If this is not the case (when changing the input/output channels), we can perform a linear projection $W_{s}$ by the shortcut connections to match the dimensions:
 %\vspace{-.5em}
 \begin{equation}\label{eq:transform}
-\ve{y}= \mathcal{F}(\ve{x}, \{W_{i}\}) + W_{s}\ve{x}.
+\wve{y}= \mathcal{F}(\wve{x}, \{W_{i}\}) + W_{s}\wve{x}.
 \end{equation}
 We can also use a square matrix $W_{s}$ in Eqn.(\ref{eq:identity}). But we will show by experiments that the identity mapping is sufficient for addressing the degradation problem and is economical, and thus $W_{s}$ is only used when matching dimensions.
 
-The form of the residual function $\mathcal{F}$ is flexible. Experiments in this paper involve a function $\mathcal{F}$ that has two or three layers (Fig.~\ref{fig:block_deeper}), while more layers are possible. But if $\mathcal{F}$ has only a single layer, Eqn.(\ref{eq:identity}) is similar to a linear layer: $\ve{y}=W_1\ve{x}+\ve{x}$, for which we have not observed advantages.
+The form of the residual function $\mathcal{F}$ is flexible. Experiments in this paper involve a function $\mathcal{F}$ that has two or three layers (Fig.~\ref{fig:block_deeper}), while more layers are possible. But if $\mathcal{F}$ has only a single layer, Eqn.(\ref{eq:identity}) is similar to a linear layer: $\wve{y}=W_1\wve{x}+\wve{x}$, for which we have not observed advantages.
 
-We also note that although the above notations are about fully-connected layers for simplicity, they are applicable to convolutional layers. The function $\mathcal{F}(\ve{x}, \{W_{i}\})$ can represent multiple convolutional layers. The element-wise addition is performed on two feature maps, channel by channel.
+We also note that although the above notations are about fully-connected layers for simplicity, they are applicable to convolutional layers. The function $\mathcal{F}(\wve{x}, \{W_{i}\})$ can represent multiple convolutional layers. The element-wise addition is performed on two feature maps, channel by channel.
 
 \begin{figure}[t]
 \begin{center}
@@ -321,9 +321,9 @@ Next we evaluate 18-layer and 34-layer residual nets (\emph{ResNets}). The basel
 
 We have three major observations from Table~\ref{tab:plain_vs_shortcut} and Fig.~\ref{fig:imagenet}. First, the situation is reversed with residual learning -- the 34-layer ResNet is better than the 18-layer ResNet (by 2.8\%). More importantly, the 34-layer ResNet exhibits considerably lower training error and is generalizable to the validation data. This indicates that the degradation problem is well addressed in this setting and we manage to obtain accuracy gains from increased depth.
 
-Second, compared to its plain counterpart, the 34-layer ResNet reduces the top-1 error by 3.5\% (Table~\ref{tab:plain_vs_shortcut}), resulting from the successfully reduced training error (Fig.~\ref{fig:imagenet} right \vs left). This comparison verifies the effectiveness of residual learning on extremely deep systems.
+Second, compared to its plain counterpart, the 34-layer ResNet reduces the top-1 error by 3.5\% (Table~\ref{tab:plain_vs_shortcut}), resulting from the successfully reduced training error (Fig.~\ref{fig:imagenet} right \wvs left). This comparison verifies the effectiveness of residual learning on extremely deep systems.
 
-Last, we also note that the 18-layer plain/residual nets are comparably accurate (Table~\ref{tab:plain_vs_shortcut}), but the 18-layer ResNet converges faster (Fig.~\ref{fig:imagenet} right \vs left).
+Last, we also note that the 18-layer plain/residual nets are comparably accurate (Table~\ref{tab:plain_vs_shortcut}), but the 18-layer ResNet converges faster (Fig.~\ref{fig:imagenet} right \wvs left).
 When the net is ``not overly deep'' (18 layers here), the current SGD solver is still able to find good solutions to the plain net. In this case, the ResNet eases the optimization by providing faster convergence at the early stage.
 
 \begin{table}[t]
@@ -412,7 +412,7 @@ BN-inception \cite{Ioffe2015} & 4.82 \\\hline
 \end{table}
 
 \vspace{6pt}
-\noindent\textbf{Identity \vs Projection Shortcuts.}
+\noindent\textbf{Identity \wvs Projection Shortcuts.}
 We have shown that parameter-free, identity shortcuts help with training. Next we investigate projection shortcuts (Eqn.(\ref{eq:transform})).
 In Table~\ref{tab:10crop} we compare three options: (A) zero-padding shortcuts are used for increasing dimensions, and all shortcuts are parameter-free (the same as Table~\ref{tab:plain_vs_shortcut} and Fig.~\ref{fig:imagenet} right); (B) projection shortcuts are used for increasing dimensions, and other shortcuts are identity; and (C) all shortcuts are projections.
 
