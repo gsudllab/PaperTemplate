@@ -1,5 +1,7 @@
 # PaperTemplate
 
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/gsudllab/PaperTemplate/blob/master/LICENSE)
+
 For the frequent attendants of conferences and journals!
 
 This repository includes templates(adjusted a bit in different directory) and build.sh for:
