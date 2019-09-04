@@ -246,3 +246,5 @@ TSWLatexianTemp*
 *back*
 *.docx
 .vscode/
+
+main_*.tex
