@@ -21,4 +21,5 @@ cp ref.bib $dir/
 
 texify --pdf --tex-option=--interaction=errorstopmode --tex-option=--synctex=1 $dir/main.tex
 
-cp $dir/main.pdf main_$dir.pdf
+cp main.pdf main_$dir.pdf
+mv main.pdf $dir/main.pdf
