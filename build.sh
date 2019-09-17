@@ -1,9 +1,15 @@
 
+option="submission"
 dir="aaai"
 
 if [[ $# > 0 ]]
 then
     dir=$1
+fi
+if [[ $# > 1 ]]
+then
+    option="["$2"]"
+    echo $option
 fi
 
 sed '/#body#/{
