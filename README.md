@@ -1,5 +1,7 @@
 # PaperTemplate
 
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/gsudllab/PaperTemplate/blob/master/LICENSE)
+
 For the frequent attendants of conferences and journals!
 
 This repository includes templates(adjusted a bit in different directory) and build.sh for:
@@ -14,11 +16,11 @@ TODO:
 + More styles:
     + ICML style
     + IJCAI style
-    + Jounals style
+    + Some journals style
     + Rebuttal style
 + Functionality:
-    + Support in VSCode Latex-Workshop extension
-    + Support different versions: submission(double blind), priprint(arxiv), final(if it's different from arxiv)
+    + Support different versions: submission(double-blind), preprint(arxiv), final(if it's different from arxiv)
+    + convert bib file to bbl file for arxiv
     + Create the compressed package for arxiv.
 
 # Usage notes
@@ -34,7 +36,7 @@ Requirements: Bash-like support, TexLive
 
 1. Remove the main content from the tex files of different conferences and journals, such the title, the author, begin{document} to end{document}.
 2. Leave `#body#` as the replacement line in the tex files. These tex files are template files.
-3. Create a build.sh with an option of the conf/journal name to create main.tex in target directory by replacing `#body#` in the template file with the real main content from body.tex.
+3. Create a build.sh with an option of the conference/journal name to create main.tex in target directory by replacing `#body#` in the template file with the real main content from body.tex.
 4. Use the latex file from [ResNet paper](https://arxiv.org/abs/1512.03385) as the main content.
 5. Adjust the style file(.sty) to make 
 
@@ -55,11 +57,24 @@ PaperTemplate/
 ├── nips/    - different template of conferences, journals
 ├── ...
 │
-└── figures  - directory for images
+└── figures  - directory for images, 
+```
+
+# Issues
+
+Some phrases are re-defined or conflicted in some templates.
+
+```
+\newcommand{\etal}{\textit{et al}.}
+\newcommand{\ie}{\textit{i}.\textit{e}.}
+\newcommand{\eg}{\textit{e}.\textit{g}.}
+\newcommand{\vs}{\textit{V}.\textit{S}.}
+\newcommand{\ve}[1]{\mathbf{#1}} % for displaying a vector
+\newcommand{\ma}[1]{\mathrm{#1}} % for displaying a matrix
 ```
 
 # License
-This project is licensed under the MIT License. See  LICENSE for more details
+This project is licensed under the MIT License. See LICENSE for more details
 
 # Update
 
@@ -75,7 +90,3 @@ This project is licensed under the MIT License. See  LICENSE for more details
     year = {2019}
 }
 ```
-
-This README file is part from [aaai-template](https://github.com/guicho271828/aaai-template)
-
-https://travis-ci.org/guicho271828/aaai-template.svg?branch=master I don't know.
